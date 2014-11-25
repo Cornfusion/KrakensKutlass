@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour {
 	public float speed;
 	public int bounty;
 
-
+	public SpawnEnemies spawner;
 
 	//Player
 	private GameObject player;
@@ -18,6 +18,8 @@ public class Enemy : MonoBehaviour {
 	
 	void Start() 
 	{
+		spawner = GameObject.FindGameObjectWithTag("Spawn").GetComponent<SpawnEnemies>();
+
 		player = GameObject.FindGameObjectWithTag ("Player");
 		playerStats = player.GetComponent<Player>();
 	}
@@ -36,7 +38,8 @@ public class Enemy : MonoBehaviour {
 		{
 			//Reduce player lives by 1
 			--playerStats.lives;
-			
+
+			spawner.enemies.Remove(this);
 			//Destroy this object
 			Destroy(gameObject);
 		}
@@ -47,7 +50,7 @@ public class Enemy : MonoBehaviour {
 	void OnDeath()
 	{
 		playerStats.gold += bounty;
-		Destroy (gameObject);
+
 	}
 
 }

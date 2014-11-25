@@ -5,6 +5,8 @@ using Pathfinding;
 
 public class AI_Pathfinder : MonoBehaviour {
 
+
+
 	public Enemy enemyParams;
 
 	public GameObject goal;
@@ -17,14 +19,13 @@ public class AI_Pathfinder : MonoBehaviour {
 	CharacterController characterController;
 
 	private float speed;
-	float closeToWaypoint = 2f;
+	public float closeToWaypoint = 2f;
 
 	void Start()
 	{
 		goal = GameObject.FindGameObjectWithTag ("Goal");
 		goalPosition = goal.transform;
 
-		GameParameters.Instance.bRecalculatePath = false;
 		seeker = GetComponent<Seeker>();
 		seeker.StartPath (transform.position, goalPosition.position, OnPathComplete);
 
@@ -35,17 +36,12 @@ public class AI_Pathfinder : MonoBehaviour {
 
 	void Update()
 	{
-		if(GameParameters.Instance.bRecalculatePath == true)
-		{
-			RecalculatePath();
-		}
+
 	}
 
 	public void RecalculatePath()
 	{
-		seeker = GetComponent<Seeker>();
 		seeker.StartPath (transform.position, goalPosition.position, OnPathComplete);
-		GameParameters.Instance.bRecalculatePath = false;
 	}
 
 	public void OnPathComplete(Path p)
@@ -63,6 +59,7 @@ public class AI_Pathfinder : MonoBehaviour {
 
 	void FixedUpdate()
 	{
+
 		if(path == null)
 		{
 			return;
@@ -72,6 +69,11 @@ public class AI_Pathfinder : MonoBehaviour {
 		{
 			return;
 		}
+
+		//if(path.vectorPath.Count < 45)
+		//{
+		//	Debug.Log ("ERROR PATH BLOCKED!!!");
+		//}
 
 		Vector3 dir = (path.vectorPath [currentWaypoint] - transform.position).normalized * speed;
 		characterController.SimpleMove (dir);

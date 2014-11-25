@@ -120,6 +120,8 @@
      <Compile Include="Assets\Scripts\AI_Pathfinder.cs" />
      <Compile Include="Assets\Scripts\Enemy.cs" />
      <Compile Include="Assets\Scripts\GameParameters.cs" />
+     <Compile Include="Assets\Scripts\GridTile.cs" />
+     <Compile Include="Assets\Scripts\PanCamera.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\SpawnEnemies.cs" />
      <None Include="Assets\AstarPathfindingProject\Editor\EditorAssets\Materials\Navmesh2.shader" />
@@ -138,11 +140,11 @@
      <None Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Shaders\WaterInclude.cginc" />
      <None Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Shaders\FX-Water4.shader" />
      <None Include="Assets\AstarPathfindingProject\link.xml" />
- <Reference Include="Pathfinding.JsonFx">
- <HintPath>C:/Users/CornFusion/Documents/KrakensKutlass.git/trunk/KrakensKutlass_3D/Assets/AstarPathfindingProject/Plugins/JsonFx/Pathfinding.JsonFx.dll</HintPath>
- </Reference>
  <Reference Include="Pathfinding.Ionic.Zip.Reduced">
  <HintPath>C:/Users/CornFusion/Documents/KrakensKutlass.git/trunk/KrakensKutlass_3D/Assets/AstarPathfindingProject/Plugins/DotNetZip/Pathfinding.Ionic.Zip.Reduced.dll</HintPath>
+ </Reference>
+ <Reference Include="Pathfinding.JsonFx">
+ <HintPath>C:/Users/CornFusion/Documents/KrakensKutlass.git/trunk/KrakensKutlass_3D/Assets/AstarPathfindingProject/Plugins/JsonFx/Pathfinding.JsonFx.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>
