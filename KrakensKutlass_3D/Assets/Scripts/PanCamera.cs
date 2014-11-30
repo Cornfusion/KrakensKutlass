@@ -15,10 +15,13 @@ public class PanCamera : MonoBehaviour {
 	public float zoomSpeed = 1.0f;
 	private Vector3 lastPosition;
 
-	private Vector3 originPosition = new Vector3(0, 0, 0);
+//	private Vector3 originPosition = new Vector3(0, 0, 0);
 	private Vector3 tempPos;
 
 	private int screenBorder = 2;
+
+	public bool lockXPos;
+	public bool lockZPos;
 
 	// Update is called once per frame
 	void Update () 
@@ -44,13 +47,14 @@ public class PanCamera : MonoBehaviour {
 			tempPos.x = boundaryLeft.position.x;
 			transform.position = tempPos;
 		}
-
+		
 		else if(transform.position.x > boundaryRight.position.x)
 		{
 			tempPos = transform.position;
 			tempPos.x = boundaryRight.position.x;
 			transform.position = tempPos;
 		}
+
 
 		if(transform.position.z > boundaryTop.position.z)
 		{
@@ -64,6 +68,8 @@ public class PanCamera : MonoBehaviour {
 			tempPos.z = boundaryBottom.position.z;
 			transform.position = tempPos;
 		}
+
+
 
 		if(transform.position.y < boundaryZoomIn.position.y)
 		{
@@ -98,32 +104,38 @@ public class PanCamera : MonoBehaviour {
 
 	void ScreenEdgePan()
 	{
-		if(Input.mousePosition.x > Screen.width - screenBorder)
+		if(!lockXPos)
 		{
-			tempPos = transform.position;
-			tempPos.x += scrollSpeed * Time.deltaTime;
-			transform.position = tempPos;
+			if(Input.mousePosition.x > Screen.width - screenBorder)
+			{
+				tempPos = transform.position;
+				tempPos.x += scrollSpeed * Time.deltaTime;
+				transform.position = tempPos;
+			}
+			
+			else if(Input.mousePosition.x < 0 + screenBorder)
+			{
+				tempPos = transform.position;
+				tempPos.x -= scrollSpeed * Time.deltaTime;
+				transform.position = tempPos;
+			}
 		}
-
-		else if(Input.mousePosition.x < 0 + screenBorder)
+		
+		if(!lockZPos)
 		{
-			tempPos = transform.position;
-			tempPos.x -= scrollSpeed * Time.deltaTime;
-			transform.position = tempPos;
-		}
-
-		if(Input.mousePosition.y < 0 + screenBorder)
-		{
-			tempPos = transform.position;
-			tempPos.z -= scrollSpeed * Time.deltaTime;
-			transform.position = tempPos;
-		}
-
-		else if(Input.mousePosition.y > Screen.height - screenBorder)
-		{
-			tempPos = transform.position;
-			tempPos.z += scrollSpeed * Time.deltaTime;
-			transform.position = tempPos;
+			if(Input.mousePosition.y < 0 + screenBorder)
+			{
+				tempPos = transform.position;
+				tempPos.z -= scrollSpeed * Time.deltaTime;
+				transform.position = tempPos;
+			}
+			
+			else if(Input.mousePosition.y > Screen.height - screenBorder)
+			{
+				tempPos = transform.position;
+				tempPos.z += scrollSpeed * Time.deltaTime;
+				transform.position = tempPos;
+			}
 		}
 	}
 }
