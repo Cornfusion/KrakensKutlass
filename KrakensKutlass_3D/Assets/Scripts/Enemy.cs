@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour {
 	public float speed;
 	public int bounty;
 
+	//Variable to store the spawner object
 	public SpawnEnemies spawner;
 
 	//Player
@@ -18,8 +19,10 @@ public class Enemy : MonoBehaviour {
 	
 	void Start() 
 	{
+		//Find the spawner object and store it
 		spawner = GameObject.FindGameObjectWithTag("Spawn").GetComponent<SpawnEnemies>();
 
+		//Find the player object and store it
 		player = GameObject.FindGameObjectWithTag ("Player");
 		playerStats = player.GetComponent<Player>();
 	}
@@ -36,21 +39,28 @@ public class Enemy : MonoBehaviour {
 	{
 		if(collider.transform.tag == "Goal")
 		{
-			//Reduce player lives by 1
-			--playerStats.lives;
-
-			spawner.enemies.Remove(this);
-			//Destroy this object
-			Destroy(gameObject);
+			OnLeak ();
 		}
 	}
 
-
-
 	void OnDeath()
 	{
+		//add gold to the player
 		playerStats.gold += bounty;
+		//Remove this object from the enemies list
+		spawner.enemies.Remove(this);
+		//Destroy this object
+		Destroy(gameObject);
+	}
 
+	void OnLeak()
+	{
+		//Reduce player lives by 1
+		playerStats.lives--;
+		//Remove this object from the enemies list
+		spawner.enemies.Remove(this);
+		//Destroy this object
+		Destroy(gameObject);
 	}
 
 }

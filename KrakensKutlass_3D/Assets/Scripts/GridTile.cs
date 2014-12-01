@@ -26,58 +26,35 @@ public class GridTile : MonoBehaviour {
 
 	void OnMouseDown()
 	{
-		if(showTile == true)
-		{
-			showTile = false;
-			// this object was clicked - do something
-			mr.enabled = false;
-		}
-		else
-		{
-			showTile = true;
-			// this object was clicked - do something
-			mr.enabled = true;
-		}
-
-
 		BuildBasicTower ();
-		GameParameters.Instance.bRecalculatePath = true;
-
 	}  
 
 	// Update is called once per frame
 	void Update () 
 	{
-		if(GameParameters.Instance.pathBlocked)
-		{
-			//AstarPath.active.UpdateGraphs(this.collider.bounds);
-			//GameParameters.Instance.pathBlocked = false;
-
-			//GameParameters.Instance.bRecalculatePath = true;
-
-			//AstarPath.active.UpdateGraphs(buildTowers.towers[buildTowers.towers.Count].collider.bounds);
-
-			//buildTowers.DestroyLastTower();
-
-			//Show grid square again
-			//showTile = true;
-			// this object was clicked - do something
-			//mr.enabled = true;
-		}
-
-		//If I press D - manually destroy the last tower
-		if(Input.GetKeyDown(KeyCode.D))
-		{
-			buildTowers.DestroyLastTower();
-			//AstarPath.active.UpdateGraphs(gameObject.collider.bounds);
-			AstarPath.active.Scan();
-			GameParameters.Instance.bRecalculatePath = true;
-		}
+		ShowHideGrid ();
 	}
 
 	void BuildBasicTower()
 	{
 		buildTowers.BuildTower (transform.position + new Vector3 (0, 0.5f, 0), Quaternion.identity);
+
+	}
+
+	void ShowHideGrid()
+	{
+		if(Input.GetKeyDown (KeyCode.Z))
+		{
+			showTile = !showTile;
+		}
+		if(showTile == false)
+		{
+			mr.enabled = false;
+		}
+		else
+		{
+			mr.enabled = true;
+		}
 
 	}
 }

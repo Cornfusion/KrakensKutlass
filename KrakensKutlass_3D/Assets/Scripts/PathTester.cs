@@ -5,11 +5,6 @@ using Pathfinding;
 
 public class PathTester : MonoBehaviour {
 
-	//Variable to store the shortest path possible
-	//If the path length is shorter than this veriable, we know the path is blocked
-	private int quickestPath = 0;
-	
-	private bool runOnce = false;
 
 	//Stores the goal position
 	public Vector3 goalPosition;
@@ -18,54 +13,74 @@ public class PathTester : MonoBehaviour {
 	Seeker seeker;
 	Path path;
 
+	//Variable to access the towers
+	public BuildTowers buildTowers;
+
+	//Variable to access the enemies list
+	public SpawnEnemies enemies;
+
+	public bool pathIsBlocked = false;
+
 	void Start()
 	{
+
+		//Initialise the goal position
 		goalPosition = GameObject.FindGameObjectWithTag ("Goal").transform.position;
 
+		//Inistialise the seeker
+		//Give the seeker position to path to
 		seeker = GetComponent<Seeker>();
 		seeker.StartPath (transform.position, goalPosition, OnPathComplete);
+
+		//Initialise build towers to the build towers class
+		buildTowers = GameObject.FindGameObjectWithTag("BuiltTowers").GetComponent<BuildTowers>();
+
+		//Initialise enemies
+		enemies = GameObject.FindGameObjectWithTag ("Spawn").GetComponent<SpawnEnemies>();
 	}
 
 	//Recalculates the objects path based on the current grid
 	public void RecalculatePath()
 	{
+		//First, we rescan the graph to check for changes
+		AstarPath.active.Scan();
+
+		//Then we give the seeker a new position to path to
 		seeker.StartPath (transform.position, goalPosition, OnPathComplete);
 	}
 
 	public void OnPathComplete(Path p)
 	{
+		//If the path has no error
 		if(!p.error)
 		{
+			//Store the path (p) in our path variable
 			path = p;
 
-			//The first time a path is calculated (Before towers are placed)
-			//We will store the length in our quickestPath variable
-			//We only want this to run once, otherwise it will overwrite with its current path
-			if(!runOnce)
-			{
-				quickestPath = path.vectorPath.Count;
-				runOnce = true;
-			}
+			//Some lines to help with debugging
+			//Yellow is the last node in the path
+			//Red is the goals actualy position
+			//Blue is the goals position - a bit
+			Debug.DrawRay(new Vector3(p.vectorPath[p.vectorPath.Count-1].x, p.vectorPath[p.vectorPath.Count-1].y, p.vectorPath[p.vectorPath.Count-1].z), Vector3.up * 10, Color.yellow, 1);
+			Debug.DrawRay(new Vector3(goalPosition.x, goalPosition.y, goalPosition.z), Vector3.up * 10, Color.red, 1);
+			Debug.DrawRay(new Vector3(goalPosition.x - 1, goalPosition.y, goalPosition.z), Vector3.up * 10, Color.blue, 1);
 
-			//If our current path length is less than the quickest path
-			//We know the path is blocked (It won't reach the goal so the path is shortened to where it is blocked -
-			//therefore the path length will be shorter)
-			//Set the global path blocked bool to true
-			if(p.vectorPath.Count < quickestPath)
+			//If the last node in the path is not the goals position
+			//The path is blocked - destroy the last tower
+			if(p.vectorPath[p.vectorPath.Count-1].x < goalPosition.x - 1)
 			{
-				GameParameters.Instance.pathBlocked = true;
+				buildTowers.DestroyLastTower();
 			}
-			//If the path is longer or equal to the quickest path
-			//The path blocked bool is set to false
+			//If the path is not blocked
+			//recalculate each enemys path
 			else
 			{
-				GameParameters.Instance.pathBlocked = false;
+				enemies.RecalculatePath();
 			}
-
 		}
 		else
 		{
-			Debug.Log (p.error);
+			//Debug.Log (p.error);
 		}
 	}
 }

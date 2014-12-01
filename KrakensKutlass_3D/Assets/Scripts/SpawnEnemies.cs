@@ -4,59 +4,35 @@ using System.Collections.Generic;
 
 public class SpawnEnemies : MonoBehaviour {
 
-	//Pathing
-	public GameObject pathTester;
-
 	//Enemy parameters
 	public Enemy enemy;
 	public List<Enemy> enemies;
 
-	//Game parameters
-	public GameObject goal;
-	public Transform goalPosition;
 	public Vector3 enemySpawn;
 
 	//Wave parameters
 	private int waveNumber = 0;
 	public int timeBetweenWaves = 10;
 	private float currentWaveTime;
-	public float timeBetweenSpawns = 0.5f;
-	private float spawnTimer;
 	public int enemiesPerWave = 30;
-	private int enemiesSpawned = 0;
 	public int numberOfWaves;
-
 	private bool spawnWaves;
 	private bool waveEnded;
 
-	public BuildTowers buildTowers;
-
-	//enum WAVETYPE
-	//{
-	//	Normal,
-	//	Armoured,
-	//	Air,
-	//	Fast,
-	//	Stealth,
-	//	Boss
-	//
-	//};
-
-	//WAVETYPE waveType;
+	//Spawn parameters
+	public float timeBetweenSpawns = 0.5f;
+	private float spawnTimer;
+	private int enemiesSpawned = 0;
 
 	// Use this for initialization
 	void Start () 
 	{
-		pathTester = GameObject.FindGameObjectWithTag ("PathTester");
+
 		spawnTimer = timeBetweenSpawns;
 		waveEnded = true;
 		currentWaveTime = timeBetweenWaves;
-		goal = GameObject.FindGameObjectWithTag ("Goal");
-		goalPosition = goal.transform;
+
 		enemies = new List<Enemy>();
-
-		buildTowers = GameObject.FindGameObjectWithTag("BuiltTowers").GetComponent<BuildTowers>();
-
 	}
 	
 	// Update is called once per frame
@@ -87,61 +63,19 @@ public class SpawnEnemies : MonoBehaviour {
 		endWave ();
 		nextWave ();
 
-		//If the global parameter wants us to recalculate the path for each object
-		//(Usually after a tower is built or destoryed)
-		if(GameParameters.Instance.bRecalculatePath)
-		{
-			//Run the calculate path function
-			//Then turn off recalculate path
-			RecalculatePath ();
-			GameParameters.Instance.bRecalculatePath = false;
-		}
+
 	}
 
-	//Any object that needs to recalculate its path should be put into this function
-	//Only after each object has had their path recalculated - we set recalculate to false 
-	//This is why each recalculate should be done here.
-	//The path tester should recalculate first to find any problems
-	//If there are problems - break, fix them, then recalculate again.
-	void RecalculatePath()
+
+	public void RecalculatePath()
 	{
-		//Run the recalculate path function in our path tester
-		//This will tell us if the path is blocked OR not
-		pathTester.GetComponent<PathTester>().RecalculatePath();
-
-		//If the path is blocked, we want to remove the last built tower
-		//Break out of function
-		//Recalculate path
-		//Recalculate path should be set to TRUE again once the last tower has been removed
-		if(GameParameters.Instance.pathBlocked)
+		//For each enemy in the enemies list
+		//Run their recalculate path function
+		foreach (Enemy enemy in enemies)
 		{
-			buildTowers.DestroyLastTower();
-
-
-			return;
+			AI_Pathfinder pathfinder = enemy.GetComponent<AI_Pathfinder>();
+			pathfinder.RecalculatePath();
 		}
-		//If the path is not blocked
-		//calculate the path for each object
-		//Set recalculate path to false
-		else
-		{
-			foreach (Enemy enemy in enemies)
-			{
-				AI_Pathfinder pathfinder = enemy.GetComponent<AI_Pathfinder>();
-				pathfinder.RecalculatePath();
-				//MeshRenderer mr = enemy.GetComponent<MeshRenderer>();
-				//mr.material.color = Color.red;
-				
-				//Debug.Log (enemies.Count);
-			}
-			//Once each objects path has been recalculated
-			//Set recalculate path to false
-			GameParameters.Instance.bRecalculatePath = false;
-		}
-
-
-
-
 	}
 
 

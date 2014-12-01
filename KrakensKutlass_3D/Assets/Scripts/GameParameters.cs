@@ -24,9 +24,9 @@ public class GameParameters : ScriptableObject {
 
 
 	//Pathfinding
-	public bool bRecalculatePath;
-	public int pathLength;
-	public bool pathBlocked;
+	//public bool bRecalculatePath;
+	//public int pathLength;
+	//public bool pathBlocked;
 	//public GameObject lastBuiltTower;
 
 

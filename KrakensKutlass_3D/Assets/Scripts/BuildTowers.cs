@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class BuildTowers : MonoBehaviour {
 
+	//Pathing
+	public PathTester pathTester;
+
 	//List to store each type of tower
 	public List<Tower> towerTypes;
 
@@ -15,31 +18,44 @@ public class BuildTowers : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+		pathTester = GameObject.FindGameObjectWithTag ("PathTester").GetComponent<PathTester>();
 		towers = new List<Tower> ();
-
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
-	}
+	void Update () 
+	{
+		//If I press D - manually destroy the last tower
+		if(Input.GetKeyDown(KeyCode.D))
+		{			
+			DestroyLastTower();
+		}
 
-	//public void BuildTower(int type, Vector3 pos, Quaternion rot)
-	//{
-	//	towers.Add(Instantiate(towerTypes[type], pos, rot));
-	//}
+		//if(GameParameters.Instance.pathBlocked)
+		//{
+		//	DestroyLastTower();
+		//}
+	}
 
 	public void BuildTower(Vector3 pos, Quaternion rot)
 	{
 		towers.Add((Tower)Instantiate(towerType1, pos, rot));
+		pathTester.RecalculatePath ();
 	}
 
 	public void DestroyLastTower()
 	{
-		//Possible error? may need to reduce count by 1
-		if(towers.Count-1 > 0)
+		if(towers.Count-1 >= 0)
 		{
 			towers [towers.Count-1].RemoveTower ();
 		}
+		pathTester.RecalculatePath ();
 	}
+
+	public void SellTower()
+	{
+
+		pathTester.RecalculatePath ();
+	}
+
 }

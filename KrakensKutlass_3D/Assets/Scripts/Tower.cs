@@ -15,16 +15,22 @@ public class Tower : MonoBehaviour {
 	public BuildTowers builtTowers;
 
 	// Use this for initialization
-	void Start () 
+	void Awake () 
 	{
 		builtTowers = GameObject.FindGameObjectWithTag("BuiltTowers").GetComponent<BuildTowers>();
 		playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void Update () 
+	{
+
 	}
+
+	void OnMouseDown()
+	{
+		SellTower ();		
+	}  
 
 	public void SellTower()
 	{
@@ -33,12 +39,10 @@ public class Tower : MonoBehaviour {
 
 		//Give player sell gold
 		playerStats.gold += cost / 2;
-
-		//Set recalculate paths to true
-		//Set grid to recalculate
-
+				
 		//Finally, destroy this object
 		Destroy(gameObject);
+		builtTowers.SellTower();
 	}
 
 	public void RemoveTower()
@@ -46,13 +50,9 @@ public class Tower : MonoBehaviour {
 		//Remove this object from the list of towers
 		builtTowers.towers.Remove(this);
 
-		//Give player sell gold
+		//Reimburse the plater
 		playerStats.gold += cost;
-		Debug.Log ("GOLD: " + playerStats.gold);
 
-		//Set recalculate paths to true
-		//Set grid to recalculate
-		
 		//Finally, destroy this object
 		Destroy(gameObject);
 	}
