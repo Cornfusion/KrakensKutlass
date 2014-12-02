@@ -10,6 +10,10 @@ public class SpawnEnemies : MonoBehaviour {
 
 	public Vector3 enemySpawn;
 
+	//Spawn position modifier
+	public float spawnPosMod;
+	private float spawnPosModDefault;
+
 	//Wave parameters
 	private int waveNumber = 0;
 	public int timeBetweenWaves = 10;
@@ -27,6 +31,8 @@ public class SpawnEnemies : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+		spawnPosModDefault = spawnPosMod;
+		spawnPosMod *= -1;
 
 		spawnTimer = timeBetweenSpawns;
 		waveEnded = true;
@@ -119,9 +125,20 @@ public class SpawnEnemies : MonoBehaviour {
 
 	void SpawnEnemy()
 	{
+		
+		
+		if(spawnPosMod > spawnPosModDefault)
+		{
+			spawnPosMod = -spawnPosModDefault;
+		}
+
 		enemySpawn = transform.position;
-		enemySpawn.z += Random.Range(-2, 2);
+		enemySpawn.z += spawnPosMod;
 		enemies.Add((Enemy)Instantiate(enemy, enemySpawn, Quaternion.identity));
 		enemiesSpawned++;
+
+		
+		spawnPosMod++;
+		Debug.Log(spawnPosMod);
 	}
 }
