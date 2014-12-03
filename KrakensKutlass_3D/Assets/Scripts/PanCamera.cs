@@ -10,6 +10,8 @@ public class PanCamera : MonoBehaviour {
 	public Transform boundaryZoomIn;
 	public Transform boundaryZoomOut;
 
+	public Camera camera;
+
 	public float mouseSensitivity = 1.0f;
 	public float scrollSpeed = 1.0f;
 	public float zoomSpeed = 1.0f;
@@ -22,6 +24,11 @@ public class PanCamera : MonoBehaviour {
 
 	public bool lockXPos;
 	public bool lockZPos;
+
+	void Start()
+	{
+		camera = gameObject.GetComponentInChildren<Camera>();
+	}
 
 	// Update is called once per frame
 	void Update () 
@@ -36,7 +43,24 @@ public class PanCamera : MonoBehaviour {
 
 	void CameraZoom()
 	{
-		transform.Translate(Vector3.forward * Input.GetAxis("Mouse ScrollWheel") * zoomSpeed * Time.deltaTime);
+//		Debug.Log (camera.fieldOfView);
+		if(Input.GetAxis("Mouse ScrollWheel") < 0)
+		{
+			camera.fieldOfView++;
+			if(camera.fieldOfView > 30)
+			{
+				camera.fieldOfView = 30;
+			}
+		}
+		else if (Input.GetAxis("Mouse ScrollWheel") > 0)
+		{
+			camera.fieldOfView--;
+			if(camera.fieldOfView < 15)
+			{
+				camera.fieldOfView = 15;
+			}
+		}
+		//transform.Translate(Vector3.forward * Input.GetAxis("Mouse ScrollWheel") * zoomSpeed * Time.deltaTime);
 	}
 
 	void LimitCameraPan()

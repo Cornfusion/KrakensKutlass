@@ -30,9 +30,14 @@ public class Player : MonoBehaviour {
 
 	void GoldPileSize()
 	{
-		Debug.Log (lives);
+		//Debug.Log (lives);
 		sizePercentage = (float)(lives / defaultLives);
-		Debug.Log (sizePercentage);
+		//Debug.Log (sizePercentage);
 		goldPile.localScale = goldPileOriginalSize * sizePercentage;
+	}
+
+	void OnGUI()
+	{
+
 	}
 }

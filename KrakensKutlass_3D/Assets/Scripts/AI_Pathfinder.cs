@@ -92,6 +92,12 @@ public class AI_Pathfinder : MonoBehaviour {
 		Vector3 dir = (path.vectorPath [currentWaypoint] - transform.position).normalized * speed;
 		characterController.SimpleMove (dir);
 
+		//We want the enemy to rotate towards the next node so it looks like its turning
+		Vector3 rotateDir = dir;
+		rotateDir.y = 0;
+		Vector3 newDir = Vector3.RotateTowards(transform.forward, rotateDir, 0.05f, 0.0f);
+		transform.rotation = Quaternion.LookRotation(newDir);
+
 		//When we are close enough to the next waypoint
 		//Get the next waypoint
 		if(Vector3.Distance(transform.position, path.vectorPath[currentWaypoint]) <= closeToWaypoint)

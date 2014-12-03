@@ -139,6 +139,6 @@ public class SpawnEnemies : MonoBehaviour {
 
 		
 		spawnPosMod++;
-		Debug.Log(spawnPosMod);
+		//Debug.Log(spawnPosMod);
 	}
 }

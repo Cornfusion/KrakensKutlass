@@ -55,6 +55,10 @@ public class GridTile : MonoBehaviour {
 		{
 			mr.enabled = true;
 		}
+	}
 
+	void OnMouseOver()
+	{
+		mr.enabled = false;
 	}
 }
