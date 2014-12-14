@@ -7,6 +7,7 @@ public class AI_Pathfinder : MonoBehaviour {
 
 	//Store the objects parameters so the pathfinding can access things like move Speed etc.
 	public Enemy enemyParams;	
+
 	//Local variable to store speed (We get the speed at start up from enemyParams)
 	private float speed;
 
@@ -89,8 +90,15 @@ public class AI_Pathfinder : MonoBehaviour {
 
 		//Store the direction towards the next waypoint
 		//Then simple move in that direction
-		Vector3 dir = (path.vectorPath [currentWaypoint] - transform.position).normalized * speed;
-		characterController.SimpleMove (dir);
+		//Vector3 dir = (path.vectorPath [currentWaypoint] - transform.position).normalized * speed;
+		//characterController.SimpleMove (dir);
+
+		enemyParams.SetMovementNode( path.vectorPath [currentWaypoint] );
+
+
+		//Vector3 node = new Vector3(path.vectorPath [currentWaypoint].x, 0.00f, path.vectorPath [currentWaypoint].y);
+		//Vector3 RealDir = (node - transform.position).normalized;
+		//this.transform.LookAt( RealDir  );
 
 		//When we are close enough to the next waypoint
 		//Get the next waypoint
